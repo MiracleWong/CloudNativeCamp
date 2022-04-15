@@ -47,3 +47,10 @@ var map1 map[keytype]keytype
 myMap := make(map[string]string, 10)
 myMap["a"] = "b"
 ```
+
+# 函数
+
+## main函数
+
+## init函数
+会在包初始化时运行
