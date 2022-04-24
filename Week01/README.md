@@ -54,3 +54,30 @@ myMap["a"] = "b"
 
 ## init函数
 会在包初始化时运行
+
+
+
+# 领教教学
+
+- [Apple Silicon M1虚拟机现状-小果冻之家](https://www.pimspeak.com/apple-m1-virtualization-situation.html)
+
+## Go切片扩容机制：
+
+切片扩容机制：当原切片长度小于1024时，新切片的容量会直接翻倍。而当原切片的容量大于等于1024时，会反复地增加25%，直到新容量超过所需要的容量
+
+注意：1.18之后扩容机制变了！https://github.com/golang/go/commit/2dda92ff6f9f07eeb110ecbf0fc2d7a0ddd27f9d
+
+```
+starting cap    growth factor
+256             2.0
+512             1.63
+1024            1.44
+2048            1.35
+4096            1.30
+```
+
+## 函数：多返回值
+
+
+
+[GOPROXY](https://goproxy.io/zh/)
