@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 )
 
@@ -27,5 +28,8 @@ func healthz(w http.ResponseWriter, r *http.Request) {
 
 	resp := http.Response{Header: r.Header}
 	fmt.Println("Response Header: ", resp.Header)
+
+	version := os.Getenv("VERSION")
+	fmt.Println("VERSION is:", version)
 
 }
