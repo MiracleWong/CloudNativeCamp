@@ -3,7 +3,7 @@
 
 1. 编写 Dockerfile 将练习 2.2 编写的 httpserver 容器化
 
-代码详情见Week03 的 homework，dockerfile 和 dockerfile-mod 在 httpserver 路径下：
+代码详情见 Week03 的 homework，dockerfile 和 dockerfile-mod 在 httpserver 路径下：
 
 `dockerfile` 为 传统方式的`dockerfile`
 
@@ -83,6 +83,8 @@ docker run --name httpserver -d -p 80:80 docker.io/miraclewong/httpserver:v2
 curl 127.0.0.1:80/healthz
 200
 ```
+
+Web页面：0.0.0.0:80/debug/pprof/
 
 ![pprof页面](http://images.iotop.work/uPic/20220503-pprof.png)
 
