@@ -7,9 +7,46 @@
 作业要求：编写 Kubernetes 部署脚本将 httpserver 部署到 Kubernetes 集群，以下是你可以思考的维度。
 
 1. 优雅启动
+```shell
+PID=$(docker inspect --format="{{ .State.Pid }}" httpserver)
+nsenter -t $PID -n ip a
+```
 2. 优雅终止
+```shell
+PID=$(docker inspect --format="{{ .State.Pid }}" httpserver)
+nsenter -t $PID -n ip a
+```
 3. 资源需求和 QoS 保证
+```shell
+PID=$(docker inspect --format="{{ .State.Pid }}" httpserver)
+nsenter -t $PID -n ip a
+```
 4. 探活
+探活采用的是readness 和 liveness 
+
+```yaml
+          livenessProbe:¬
+            httpGet:¬
+          path: /healthz¬
+          port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5¬
+            readinessProbe:¬
+            httpGet:¬
+          path: /healthz¬
+          port: 80¬
+          initialDelaySeconds: 30¬
+          periodSeconds: 5¬
+          successThreshold: 2¬
+```
 5. 日常运维需求，日志等级
+```shell
+PID=$(docker inspect --format="{{ .State.Pid }}" httpserver)
+nsenter -t $PID -n ip a
+```
 6. 配置和代码分离
+```shell
+PID=$(docker inspect --format="{{ .State.Pid }}" httpserver)
+nsenter -t $PID -n ip a
+```
 
