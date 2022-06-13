@@ -8,7 +8,7 @@ WORKDIR /build
 COPY . .
 RUN go build -o httpserver .
 
-FROM scratch
+FROM busybox:latest
 COPY --from=builder /build/httpserver /
 EXPOSE 80
 ENTRYPOINT ["/httpserver"]

@@ -8,7 +8,9 @@ import (
 	"net/http"
 	"net/http/pprof"
 	"os"
+	"os/signal"
 	"strconv"
+	"syscall"
 )
 
 func main() {
@@ -24,6 +26,19 @@ func main() {
 	if err != nil {
 		log.Fatal("start server failed: %s \n", err.Error())
 	}
+
+	// 监控两个信号
+	// TERM信号（kill + 进程号 触发）
+	// 中断信号（ctrl + c 触发）
+	osc := make(chan os.Signal, 1)
+	signal.Notify(osc, syscall.SIGTERM, syscall.SIGINT)
+	s := <-osc
+	fmt.Println("监听到退出信号,s=", s)
+
+	// 退出前的清理操作
+	// clean()
+
+	fmt.Println("main程序退出")
 }
 
 func healthz(w http.ResponseWriter, r *http.Request) {

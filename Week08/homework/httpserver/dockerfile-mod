@@ -7,7 +7,7 @@ ENV GO111MODULE=on
 ENV GOPROXY=https://goproxy.cn,direct
 RUN GOOS=linux go build -installsuffix cgo -o httpserver main.go
 
-FROM scratch
+FROM busybox:latest
 COPY --from=build /httpserver /httpserver
 EXPOSE 80
 WORKDIR /
