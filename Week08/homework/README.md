@@ -268,6 +268,8 @@ Ingress
 
 在 「作业一」的基础上，加入service 和 ingress 的内容。
 
+请在完成 「0. 准备工作」的基础上，使用 deploy.sh 进行部署和测试服务
+
 0. 准备工作
 
 安装 NGINX Ingress Controller 最快的方法是使用Helm（默认已经安装）. 
@@ -315,35 +317,45 @@ main-nginx-ingress   NodePort   10.108.204.183   <none>        80:30010/TCP,443:
 1. Service 的配置
 
 ```
-apiVersion: v1 
-kind: Service 
-metadata: 
+apiVersion: v1
+kind: Service
+metadata:
   name: httpserver
-spec: 
-  ports: 
+spec:
+  ports:
     - port: 80
       targetPort: 80
-      nodePort: 30001 
-  selector: 
-    app: httpserver 
+      nodePort: 30001
+  selector:
+    app: httpserver
   type: NodePort
 ```
 
 2. Ingress的配置
 
 ```
-apiVersion: v1 
-kind: Service 
-metadata: 
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
   name: httpserver
-spec: 
-  ports: 
-    - port: 80
-      targetPort: 80
-      nodePort: 30001 
-  selector: 
-    app: httpserver 
-  type: NodePort
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+    - hosts:
+        - httpserver.com
+      secretName: httpserver-tls
+  rules:
+    - host: httpserver.com
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: httpserver
+                port:
+                  number: 80
 ```
 
 
