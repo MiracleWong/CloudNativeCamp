@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: httpserver
-          image: miraclewong/httpserver:v8
+          image: miraclewong/httpserver:v9
           command: [/httpserver]
           ports:
           - containerPort: 80
@@ -41,16 +41,3 @@ spec:
             initialDelaySeconds: 30
             periodSeconds: 5
             successThreshold: 2
---- 
-apiVersion: v1 
-kind: Service 
-metadata: 
-  name: httpserver
-spec: 
-  ports: 
-    - port: 80
-      targetPort: 80
-      nodePort: 30001 
-  selector: 
-    app: httpserver 
-  type: NodePort

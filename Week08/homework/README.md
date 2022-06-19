@@ -1,6 +1,8 @@
 # Week08 的作业
 
 
+## 作业一
+
 现在你对 Kubernetes 的控制面板的工作机制是否有了深入的了解呢？
 是否对如何构建一个优雅的云上应用有了深刻的认识，那么接下来用最近学过的知识把你之前编写的 http 以优雅的方式部署起来吧，你可能需要审视之前代码是否能满足优雅上云的需求。
 
@@ -247,3 +249,113 @@ spec:
 - 在此基础上，加入了Service的NodePort曝露，采用 curl NodeIP:Port/healthz 的方式来判断内部httpserver 已经启动
 
 
+## 作业二
+
+除了将 httpServer 应用优雅的运行在 Kubernetes 之上，我们还应该考虑如何将服务发布给对内和对外的调用方。
+来尝试用 Service, Ingress 将你的服务发布给集群外部的调用方吧。
+在第一部分的基础上提供更加完备的部署 spec，包括（不限于）：
+
+Service
+Ingress
+
+### 可以考虑的细节
+
+如何确保整个应用的高可用。
+如何通过证书保证 httpServer 的通讯安全。
+
+
+### 我的作业实现
+
+在 「作业一」的基础上，加入service 和 ingress 的内容。
+
+0. 准备工作
+
+安装 NGINX Ingress Controller 最快的方法是使用Helm（默认已经安装）. 
+官网地址： [Helm | 安装Helm](https://helm.sh/zh/docs/intro/install/)
+
+
+创建命名空间：
+
+```
+kubectl create namespace nginx
+```
+
+将 NGINX 仓库添加到 Helm：
+```
+helm repo add nginx-stable https://helm.nginx.com/stable 
+```
+
+在集群中下载并安装 NGINX Ingress Controller：
+
+```
+helm install main nginx-stable/nginx-ingress \ 
+ --set controller.watchIngressWithoutClass=true \ 
+ --set controller.ingressClass=nginx \ 
+ --set controller.service.type=NodePort \ 
+ --set controller.service.httpPort.nodePort=30010 \ 
+ --set controller.enablePreviewPolicies=true \ 
+ --namespace nginx 
+```
+
+确认 NGINX Ingress Controller 已经安装成功
+
+```
+$ kubectl get pods --namespace nginx 
+NAME                                  READY   STATUS    RESTARTS   AGE
+main-nginx-ingress-7fc967f7dd-g5w8g   1/1     Running   0          30s
+```
+
+```
+$ kubectl get svc -n nginx
+NAME                 TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)                      AGE
+main-nginx-ingress   NodePort   10.108.204.183   <none>        80:30010/TCP,443:30107/TCP   39s
+```
+
+
+1. Service 的配置
+
+```
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: httpserver
+spec: 
+  ports: 
+    - port: 80
+      targetPort: 80
+      nodePort: 30001 
+  selector: 
+    app: httpserver 
+  type: NodePort
+```
+
+2. Ingress的配置
+
+```
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: httpserver
+spec: 
+  ports: 
+    - port: 80
+      targetPort: 80
+      nodePort: 30001 
+  selector: 
+    app: httpserver 
+  type: NodePort
+```
+
+
+3. Web访问
+
+在 hosts 文件中指定
+```
+127.0.0.1 httpserver.com
+```
+或者获取本机IP（XXX.XXX.XXX.XXX）后，
+```
+XXX.XXX.XXX.XXX httpserver.com
+```
+
+Web页面访问：httpserver.com/debug/pprof/ 即可
