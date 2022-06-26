@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: httpserver
-          image: miraclewong/httpserver:v10-metrics
+          image: miraclewong/httpserver:v10
           command: [/httpserver]
           ports:
           - containerPort: 80
