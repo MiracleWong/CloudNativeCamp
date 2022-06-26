@@ -161,11 +161,24 @@ kubectl get secret --namespace default loki-grafana -o jsonpath="{.data.admin-pa
 
 5. 登录Grafana、Prometheus
 
-### 4. 从 Promethus 界面中查询延时指标数据；
+### 4. 自动请求的脚本
+
+其中：30001是httpserver 的service 的NodePort曝露出来的端口，发送200个请求便于生成Prometheus的数据、Grafana便于观察
+
+```shell
+#!/bin/bash
+for ((i=1;i<=200;i++));
+do
+    curl 127.0.0.1:30001/hello
+    sleep 2
+done
+```
+
+### 5. 从 Promethus 界面中查询延时指标数据；
 
 延时数据：
 
-```PromSQL
+```PromQL
 httpserver_execution_latency_seconds_bucket
 ```
 
@@ -173,27 +186,27 @@ httpserver_execution_latency_seconds_bucket
 
 聚合查询：
 
-```PromSQL
+```PromQL
 histogram_quantile(0.50, sum(rate(httpserver_execution_latency_seconds_bucket[5m])) by (le))
 ```
 
 ![](./prometheus-50.png)
 
 
-```PromSQL
+```PromQL
 histogram_quantile(0.90, sum(rate(httpserver_execution_latency_seconds_bucket[5m])) by (le))
 ```
 
 ![](./prometheus-90.png)
 
 
-```PromSQL
+```PromQL
 histogram_quantile(0.95, sum(rate(httpserver_execution_latency_seconds_bucket[5m])) by (le))
 ```
 ![](./prometheus-95.png)
 
 
-### 5. （可选）创建一个 Grafana Dashboard 展现延时分配情况。
+### 6. （可选）创建一个 Grafana Dashboard 展现延时分配情况。
 
 只需要选择Prometheus的数据源，将上方的PromSQL 聚合查询的语句放入，设置查询最近5min数据，设置好图示，就可以了
 ![](./grafana-edit.png)
