@@ -38,5 +38,5 @@ require (
 )
 
 replace (
-	github.com/MiracleWong/CloudNativeCamp/Week10/homework/httpserver/metrics v1.0.0 => /Users/miracle/go/src/github.com/MiracleWong/CloudNativeCamp/Week10/homework/httpserver/metrics
+	github.com/MiracleWong/CloudNativeCamp/Week10/homework/httpserver/metrics v1.0.0 => ./metrics
 )

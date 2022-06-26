@@ -2,6 +2,8 @@ FROM golang:1.17.2 AS build
 
 WORKDIR /
 COPY . .
+
+RUN go mod download
 ENV CGO_ENABLED=0
 ENV GO111MODULE=on
 ENV GOPROXY=https://goproxy.cn,direct

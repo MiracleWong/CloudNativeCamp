@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "begin dir: "$(pwd)
 # build image
-docker build -t httpserver:v9 -f dockerfile-mod .
-docker tag httpserver:v9 miraclewong/httpserver:v9
+docker build -t httpserver:v10 -f dockerfile-mod .
+docker tag httpserver:v10 miraclewong/httpserver:v10
 docker push miraclewong/httpserver:v9
 
 if [ 0 != $? ]
